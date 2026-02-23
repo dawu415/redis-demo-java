@@ -141,12 +141,12 @@ When you're ready to validate against Credhub:
 2. Redeploy: `cf push -f manifest-credhub.yml`
 
 3. Hit `/api/items/info` to confirm you're now connected to Redis Enterprise (check `redis_version` and `server_name` in the response).
-```bash
-APP_URL=$(cf app credhub-redis-ent-demo | grep routes | awk '{print $2}')
-
-# Check connection info — confirms you're hitting Redis
-curl -s https://$APP_URL/api/items/info | jq .
-```
+   ```bash
+   APP_URL=$(cf app credhub-redis-ent-demo | grep routes | awk '{print $2}')
+   
+   # Check connection info — confirms you're hitting Redis
+   curl -s https://$APP_URL/api/items/info | jq .
+   ```
 
 4. Run the same CRUD operations to validate functional parity.
 
