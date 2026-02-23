@@ -1,4 +1,4 @@
-# Redis Demo - Spring Boot on TAS
+# Redis Demo - Spring Boot on TAS/TPCF
 
 A minimal Spring Boot 3.4 / Java 21 application for validating connectivity to **Redis** on Tanzu Platform for Cloud Foundry, 
 and for proving out migration from **Redis Enterprise Brokered Service** to using a **Credhub** service.
