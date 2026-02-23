@@ -1,0 +1,18 @@
+---
+applications:
+  - name: credhub-redis-ent-demo
+    memory: 1G
+    instances: 1
+    path: build/libs/redis-demo-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - java_buildpack_offline
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
+    services:
+      # cf create-service credhub default redis-creds -t 'redis' -c '{
+      #  "spring.data.redis.host": "redis-17113.internal.xx.net",
+      #  "spring.data.redis.password": "CHANGEME",
+      #  "spring.data.redis.port": 17113,
+      #  "spring.data.redis.ssl.enabled": false
+      #}'
+      - redis-creds
