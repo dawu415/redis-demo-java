@@ -2,6 +2,10 @@
 
 A minimal Spring Boot 3.4 / Java 21 application for validating connectivity to **Redis** on Tanzu Platform for Cloud Foundry, 
 and for proving out migration from **Redis Enterprise Brokered Service** to using a **Credhub** service.
+For the example steps below, it is assumed you have the CF cli and jq installed on your machine, and that you are logged into
+a TPCF foundation via the CF cli.
+
+A dotnet core  version of this application can be found at https://github.com/dawu415/redis-demo-dotnet.
 
 ## Tech Stack
 
@@ -85,7 +89,6 @@ When you're ready to validate against Credhub:
    connect to the same redis instance.  Extract the credentials from the existing Redis Broker Service. 
    The minimum fields needed are `host`,`password` and `port`.
 
-
    ```bash 
       cf env 
       # Example only output!
@@ -128,9 +131,9 @@ When you're ready to validate against Credhub:
    
    ```
 
-2. Create a **Credhub** service pointing to your Redis Enterprise endpoint: (Take note of the **-t 'redis'** parameter)
+2. Create a **Credhub** service pointing to your Redis Enterprise endpoint: (Take note of the **spring.data.redis.** prefix)
    ```bash
-      cf create-service credhub default redis-creds -t 'redis' -c '{
+      cf create-service credhub default redis-creds -c '{
        "spring.data.redis.host": "redis-16917.internal.redis-enterprise-01.xx.com",
        "spring.data.redis.password": "<SOMETHINGSECRET>",
        "spring.data.redis.port": 16917,
@@ -138,9 +141,9 @@ When you're ready to validate against Credhub:
      }'
    ```
 
-2. Redeploy: `cf push -f manifest-credhub.yml`
+3. Redeploy: `cf push -f manifest-credhub.yml`
 
-3. Hit `/api/items/info` to confirm you're now connected to Redis Enterprise (check `redis_version` and `server_name` in the response).
+4. Hit `/api/items/info` to confirm you're now connected to Redis Enterprise (check `redis_version` and `server_name` in the response).
    ```bash
    APP_URL=$(cf app credhub-redis-ent-demo | grep routes | awk '{print $2}')
    
@@ -148,6 +151,9 @@ When you're ready to validate against Credhub:
    curl -s https://$APP_URL/api/items/info | jq .
    ```
 
-4. Run the same CRUD operations to validate functional parity.
+5. Run the same CRUD operations to validate functional parity.
 
 > **Tip:** The `/api/items/info` endpoint is your best friend during migration — it shows you exactly which server you're connected to without needing to SSH into the container.
+
+# Contributions
+Thanks to @rabeyta for his time on pairing on this.
